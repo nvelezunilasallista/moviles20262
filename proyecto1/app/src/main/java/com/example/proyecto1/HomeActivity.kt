@@ -1,8 +1,8 @@
 package com.example.proyecto1
 
-import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -19,6 +19,25 @@ class HomeActivity : AppCompatActivity() {
             insets
         }
 
+        val tvEmail = findViewById<TextView>(R.id.tvEmail)
+        val email = intent.getStringExtra("USER_EMAIL")
+        tvEmail.text = email
 
+        val tvPhrase = findViewById<TextView>(R.id.tvPhrase)
+        val btnNextWord = findViewById<Button>(R.id.btnNextWord)
+
+        val phrase = "El éxito consiste en ir de fracaso en fracaso sin perder el entusiasmo"
+        val words = phrase.split(" ")
+        var currentIndex = 0
+
+        btnNextWord.setOnClickListener {
+            if (currentIndex < words.size) {
+                tvPhrase.text = words[currentIndex]
+                currentIndex++
+            } else {
+                tvPhrase.text = "¡Frase terminada!"
+                currentIndex = 0
+            }
+        }
     }
 }
