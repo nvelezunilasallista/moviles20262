@@ -1,12 +1,15 @@
 package com.example.proyecto1
 
 import android.os.Bundle
-import android.widget.Button
-import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.fragment.app.Fragment
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 
 class HomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,25 +22,25 @@ class HomeActivity : AppCompatActivity() {
             insets
         }
 
-        val tvEmail = findViewById<TextView>(R.id.tvEmail)
-        val email = intent.getStringExtra("USER_EMAIL")
-        tvEmail.text = email
+        val tabLayout = findViewById<TabLayout>(R.id.tabLayout)
+        val viewPager = findViewById<ViewPager2>(R.id.viewPager)
 
-        val tvPhrase = findViewById<TextView>(R.id.tvPhrase)
-        val btnNextWord = findViewById<Button>(R.id.btnNextWord)
+        viewPager.adapter = object : FragmentStateAdapter(this) {
+            override fun getItemCount(): Int = 3
 
-        val phrase = "El éxito consiste en ir de fracaso en fracaso sin perder el entusiasmo"
-        val words = phrase.split(" ")
-        var currentIndex = 0
-
-        btnNextWord.setOnClickListener {
-            if (currentIndex < words.size) {
-                tvPhrase.text = words[currentIndex]
-                currentIndex++
-            } else {
-                tvPhrase.text = "¡Frase terminada!"
-                currentIndex = 0
+            override fun createFragment(position: Int): Fragment {
+                return when (position) {
+                    0 -> HomeFragment()
+                    1 -> ContactsFragment()
+                    2 -> SettingsFragment()
+                    else -> HomeFragment()
+                }
             }
         }
+
+        val tabTitles = arrayOf("Inicio", "Contactos", "Ajustes")
+        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+            tab.text = tabTitles[position]
+        }.attach()
     }
 }
